@@ -1,3 +1,5 @@
+
+
 # Cisco IOS Device Hardening & Security Specification
 
 ## Project Overview
@@ -31,22 +33,17 @@ Switch(config)# service password-encryption
 ! Set a securely hashed Enable Secret password for privileged exec mode
 Switch(config)# enable secret [REDACTED_SECURE_HASH]
 
+! Select all unused ports via interface range
+Switch(config)# interface range gigabitEthernet 1/0/4 - 48
+Switch(config-if-range)# shutdown
+Switch(config-if-range)# description ADMINISTRATIVELY DISABLED / UNUSED PORT
+Switch(config-if-range)# exit
+
 Switch(config)# interface gigabitEthernet 1/0/3
 ! Disable dynamic trunk negotiation
 Switch(config-if)# switchport nonegotiate
 Switch(config-if)# exit
----
 
-## Step 4: Paste the Legal Banners and Verification
-Finally, paste the legal warning banner setup and the validation commands at the very bottom of the file to close out the document:
-
-```markdown
----
-
-## 3. Operational Banners
-Configured a legal notification banner visible during login attempts to explicitly deny unauthorized access, satisfying standard enterprise compliance requirements.
-
-```text
 Switch(config)# banner motd ^C
 ======================================================================
      UNAUTHORIZED ACCESS TO THIS RESOURCE IS STRICTLY PROHIBITED
@@ -55,3 +52,4 @@ Switch(config)# banner motd ^C
 ^C
 Switch(config)# end
 Switch# write memory
+
