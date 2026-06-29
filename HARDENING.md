@@ -26,30 +26,3 @@ Switch(config)# line vty 0 15
 Switch(config-line)# transport input ssh
 Switch(config-line)# login local
 Switch(config-line)# exit
-
-! Enable global password encryption service
-Switch(config)# service password-encryption
-
-! Set a securely hashed Enable Secret password for privileged exec mode
-Switch(config)# enable secret [REDACTED_SECURE_HASH]
-
-! Select all unused ports via interface range
-Switch(config)# interface range gigabitEthernet 1/0/4 - 48
-Switch(config-if-range)# shutdown
-Switch(config-if-range)# description ADMINISTRATIVELY DISABLED / UNUSED PORT
-Switch(config-if-range)# exit
-
-Switch(config)# interface gigabitEthernet 1/0/3
-! Disable dynamic trunk negotiation
-Switch(config-if)# switchport nonegotiate
-Switch(config-if)# exit
-
-Switch(config)# banner motd ^C
-======================================================================
-     UNAUTHORIZED ACCESS TO THIS RESOURCE IS STRICTLY PROHIBITED
-  All activities are logged. Disconnect immediately if unauthorized.
-======================================================================
-^C
-Switch(config)# end
-Switch# write memory
-
