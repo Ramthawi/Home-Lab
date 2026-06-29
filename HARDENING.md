@@ -27,11 +27,9 @@ Switch(config)# line vty 0 15
 Switch(config-line)# transport input ssh
 Switch(config-line)# login local
 Switch(config-line)# exit
-
 ```
 
 ### Credential Encryption & Privileged Access
-
 Local execution passwords must be cryptographically hashed within the running configuration to prevent shoulder-surfing or configuration-leak exposures.
 
 ```text
@@ -40,7 +38,6 @@ Switch(config)# service password-encryption
 
 ! Set a securely hashed Enable Secret password for privileged exec mode
 Switch(config)# enable secret [REDACTED_SECURE_HASH]
-
 ```
 
 ---
@@ -48,7 +45,6 @@ Switch(config)# enable secret [REDACTED_SECURE_HASH]
 ## 2. Layer 2 & Interface Hardening
 
 ### Disabling Unused Ports (The "Black Hole" Concept)
-
 Unused physical ports left active present an unauthorized physical access risk. All unallocated interfaces on the 48-port switch have been administratively disabled.
 
 ```text
@@ -57,11 +53,9 @@ Switch(config)# interface range gigabitEthernet 1/0/4 - 48
 Switch(config-if-range)# shutdown
 Switch(config-if-range)# description ADMINISTRATIVELY DISABLED / UNUSED PORT
 Switch(config-if-range)# exit
-
 ```
 
 ### Access Port Security Boundary
-
 For active ports assigned to endpoints (such as Port `Gi1/0/3`), Dynamic Trunking Protocol (DTP) must be disabled to prevent VLAN hopping attacks, where a rogue device attempts to spoof a switch to negotiate an unauthorized trunk link.
 
 ```text
@@ -69,13 +63,11 @@ Switch(config)# interface gigabitEthernet 1/0/3
 ! Disable dynamic trunk negotiation
 Switch(config-if)# switchport nonegotiate
 Switch(config-if)# exit
-
 ```
 
 ---
 
 ## 3. Operational Banners
-
 Configured a legal notification banner visible during login attempts to explicitly deny unauthorized access, satisfying standard enterprise compliance requirements.
 
 ```text
@@ -87,18 +79,12 @@ Switch(config)# banner motd ^C
 ^C
 Switch(config)# end
 Switch# write memory
-
 ```
 
 ---
 
 ## 4. Verification & Auditing
-
 To verify the hardening status of the switch plane, the following operational commands are used to audit active security settings:
 
 * `show ip ssh` -> Confirmed SSH v2 is active and running.
 * `show interfaces status` -> Verified ports 4 through 48 show `disabled` under the operational status column.
-
-```
-
-```
