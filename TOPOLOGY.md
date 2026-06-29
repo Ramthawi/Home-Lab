@@ -38,21 +38,27 @@ The physical cabling path dictates how frames travel up to the security gateway.
  (Production)       (Isolated VLAN 10)
 
 
-3. Interface & Port Allocations
+---
+
+## 3. Interface & Port Allocations
+
 To maintain structural organization, specific ports are designated for infrastructure uplinks, core production routing, and isolated lab access.
 
-Device	Physical Port	Connected To	Link Type	Assigned VLAN / Profile
-UniFi UDM-Pro	WAN 1	ISP Modem	Routed Link	Public IP / DHCP
-UniFi UDM-Pro	LAN Port 1	UniFi Switch Port 1	Downstream Link	LAN (Default)
-UniFi 24 Switch	Port 2	Cisco Switch Gi1/0/1	802.1Q Trunk	Native: Default (1) / Tagged: 10
-Cisco 48 Switch	Gi1/0/1	UniFi Switch Port 2	802.1Q Trunk	Native: Default (1) / Tagged: 10
-Cisco 48 Switch	Gi1/0/2	Cisco Secondary Router	Access Link	Production LAN (VLAN 1)
-Cisco 48 Switch	Gi1/0/3	Homelab Test PC	Access Link	Homelab-Network (VLAN 10)
+| Device | Physical Port | Connected To | Link Type | Assigned VLAN / Profile |
+| :--- | :--- | :--- | :--- | :--- |
+| **UniFi UDM-Pro** | WAN 1 | ISP Modem | Routed Link | Public IP / DHCP |
+| **UniFi UDM-Pro** | LAN Port 1 | UniFi Switch Port 1 | Downstream Link | LAN (Default) |
+| **UniFi 24 Switch** | Port 2 | Cisco Switch Gi1/0/1 | **802.1Q Trunk** | Native: Default (1) / Tagged: 10 |
+| **Cisco 48 Switch** | Gi1/0/1 | UniFi Switch Port 2 | **802.1Q Trunk** | Native: Default (1) / Tagged: 10 |
+| **Cisco 48 Switch** | Gi1/0/2 | Cisco Secondary Router | Access Link | Production LAN (VLAN 1) |
+| **Cisco 48 Switch** | Gi1/0/3 | Homelab Test PC | Access Link | **Homelab-Network (VLAN 10)** |
 
+---
 
+## 4. Architectural Design Logic
 
-4. Architectural Design Logic
-Trunking Architecture: The link between UniFi Port 2 and Cisco Port Gi1/0/1 uses 802.1Q encapsulation. This ensures that while standard production traffic passes through untagged, any packet originating from Cisco Port Gi1/0/3 is injected with a 4-byte VLAN 10 tag header, keeping it digitally segregated across the entire physical wire.
+* **Trunking Architecture:** The link between UniFi Port 2 and Cisco Port Gi1/0/1 uses 802.1Q encapsulation. This ensures that while standard production traffic passes through untagged, any packet originating from Cisco Port Gi1/0/3 is injected with a 4-byte VLAN 10 tag header, keeping it digitally segregated across the entire physical wire.
+* **Management Boundary:** The Cisco Switch management layer resides entirely on VLAN 1, allowing the primary administrator workspace to safely configure the distribution tier without exposing management consoles to the isolated testing environment.
 
 Management Boundary: The Cisco Switch management layer resides entirely on VLAN 1, allowing the primary administrator workspace to safely configure the distribution tier without exposing management consoles to the isolated testing environment.
 
